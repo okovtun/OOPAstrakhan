@@ -1,4 +1,5 @@
 ﻿https://github.com/okovtun/OOPAstrakhan
+https://www.youtube.com/watch?v=z2xE0bfnxB0&list=PLeqyOOqxeiIMnV5a0GG-WBAvP8UUln_jp&index=1
 https://meet.google.com/mho-khdw-fhj
 
 TODO:
