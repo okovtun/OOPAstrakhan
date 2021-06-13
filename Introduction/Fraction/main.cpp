@@ -4,6 +4,9 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+#define tab "\t"
+#define delimiter "\n----------------------------------------------------------\n"
+
 class Fraction;
 Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(Fraction left, Fraction right);
@@ -47,7 +50,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -111,6 +114,16 @@ public:
 		return old;
 	}
 
+	//			Type-cast operators:
+	explicit operator int()const
+	{
+		return integer;
+	}
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
+
 	//			Methods:
 	Fraction& to_improper()
 	{
@@ -140,6 +153,18 @@ public:
 		if (integer == 0 && numerator == 0)cout << 0;
 		cout << endl;
 	}
+
+	//friend istream& operator>>(istream& is, Fraction& obj); //Ёта функци€ использует set-методы, 
+	//поэтому данна€ строка не имеет смысла.
+	/*friend istream& operator>>(istream& is, Fraction& obj)
+	{
+		int integer, numerator, denominator;
+		is >> integer >> numerator >> denominator;
+		obj.set_integer(integer);
+		obj.set_numerator(numerator);
+		obj.set_denominator(denominator);
+		return is;
+	}*/
 };
 
 Fraction operator*(Fraction left, Fraction right)
@@ -157,7 +182,6 @@ Fraction operator*(Fraction left, Fraction right)
 		left.get_denominator()*right.get_denominator()
 	).to_proper();
 }
-
 Fraction operator/(Fraction left, Fraction right)
 {
 	/*left.to_improper();
@@ -170,7 +194,6 @@ Fraction operator/(Fraction left, Fraction right)
 	return result;*/
 	return left * right.inverted();
 }
-
 bool operator==(Fraction left, Fraction right)
 {
 	left.to_improper();
@@ -199,10 +222,49 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 	if (obj.get_integer() == 0 && obj.get_numerator() == 0)cout << 0;
 	return os;
 }
+istream& operator>>(istream& is, Fraction& obj)
+{
+	int integer, numerator, denominator;
+	integer = numerator = denominator = 0;
+	char str[256]{};
+	char* number[5]{};
+	is.getline(str, 256);
+	const char* delimiters = " (/)";
+	int i = 0;
+	for (char* pch = strtok(str, delimiters); pch; pch = strtok(NULL, delimiters), i++)
+	{
+		//cout << pch << tab;
+		number[i] = pch;
+	}
+	//for (number[i] = strtok(str, delimiters); number[i]; number[i++] = strtok(NULL, delimiters));//???
+	//for (int i = 0; i < 5; i++)cout << number[i] << tab; cout << endl;
+	switch (i)
+	{
+	case 1: integer = atoi(number[0]); break;
+	case 2:
+		numerator = atoi(number[0]);
+		denominator = atoi(number[1]);
+		break;
+	case 3:
+		integer = atoi(number[0]);
+		numerator = atoi(number[1]);
+		denominator = atoi(number[2]);
+		break;
+	default:cout << "„то-то пошло не так :-(" << endl;
+	}
+	//is >> integer >> numerator >> denominator;
+	obj.set_integer(integer);
+	obj.set_numerator(numerator);
+	obj.set_denominator(denominator);
+	return is;
+}
 
 //#define CONSTRUCTORS_CHECK
 //#define ARITHMETICAL_OPERATORS_CHECK
 //#define INCREMENT_CHECK
+//#define COMPARISON_OPERATORS_CHECK
+//#define ISTREAM_OPERATOR
+#define TYPE_CONVERSIONS
 
 void main()
 {
@@ -250,7 +312,77 @@ void main()
 	}
 #endif // INCREMENT_CHECK
 
+#ifdef COMPARISON_OPERATORS_CHECK
 	Fraction A(1, 2);
 	Fraction B(5, 11);
 	cout << (A != B) << endl;
+#endif // COMPARISON_OPERATORS_CHECK
+
+#ifdef ISTREAM_OPERATOR
+	Fraction A;
+	cout << "¬ведите целую часть, числитель и знаменатель через пробел: ";
+	cin >> A;
+	cout << A << endl;
+#endif // ISTREAM_OPERATOR
+
+#ifdef TYPE_CONVERSIONS
+	//http://cplusplus.com/doc/tutorial/typecasting/
+	/*
+	---------------------------------------------------------
+	Explicit conversions:
+	(type)value - C-like notation;
+	type(value) - Functional notation;
+
+	implicit conversions - не€вные преобразовани€.
+	Warning: .... possible loss of data.
+	---------------------------------------------------------
+	*/
+	//#define BASIC_TYPE_CONVERSIONS
+#ifdef BASIC_TYPE_CONVERSIONS
+	//				l-value = r-value;  
+	int a = 2;		//No conversion
+	double b = a;	//From less to more
+	//int c = b;		//From more to less no data loss
+	//int d = 5.2;	//From more to less with data loss
+	//int* pa = a;	//Ёти типы не преобразуютс€
+	cout << 2 + 3.5 << endl;
+	cout << double(5 / 2) << endl;
+	cout << (double)5 / 2 << endl;
+#endif // BASIC_TYPE_CONVERSIONS
+
+	//#define OTHER_2_THIS_CONVERSIONS
+#ifdef OTHER_2_THIS_CONVERSIONS
+	//Single-Argument constructor
+//Assignment operator
+	int a = 2;	//No cenversion
+	//Fraction A = a;	//From less to more
+	Fraction A(a);	//explicit конструктор можно вызвать только так,
+					//его невозможно вызвать оператором =, так как обычный конструктор с одним параметром
+	cout << A << endl;
+	cout << "\n==============================================================\n" << endl;;
+	Fraction B;	//Default constructor
+	cout << delimiter << endl;
+	B = (Fraction)5;
+	cout << delimiter << endl;
+	cout << B << endl;
+	cout << "\n==============================================================\n" << endl;;
+#endif // OTHER_2_THIS_CONVERSION
+
+	Fraction A(2, 3, 4);
+	cout << A << endl;
+	int a = (int)A;
+	cout << "a = " << a << endl;
+	double b = A;
+	cout << "b = " << b << endl;
+#endif // TYPE_CONVERSIONS
+
 }
+
+/*
+
+			operator type()
+			{
+				...;
+			}
+
+*/
