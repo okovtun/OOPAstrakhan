@@ -57,6 +57,15 @@ public:
 		this->denominator = 1;
 		cout << "SingleArgumentConstructor:\t" << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		integer = decimal;
+		decimal -= integer;
+		//denominator = 1000000000;
+		denominator = 1e+9;
+		numerator = decimal * denominator;
+		reduce();
+	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -143,14 +152,46 @@ public:
 		Fraction inverted(denominator, numerator);
 		return inverted;
 	}
+	Fraction& reduce()
+	{
+		if (numerator == 0)
+		{
+			denominator = 1;
+			return *this;
+		}
+		//https://www.webmath.ru/poleznoe/formules_12_7.php
+		int more, less;
+		int rest;	//Остаток от деления
+		if (numerator > denominator)
+		{
+			more = numerator;
+			less = denominator;
+		}
+		else
+		{
+			less = numerator;
+			more = denominator;
+		}
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more;	//GCD - Greatest Common Divider
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
+	}
 
 	void print()
 	{
-		if (integer)cout << integer;
+		/*if (integer)cout << integer;
 		if (integer && numerator)cout << "(";
 		if (numerator)cout << numerator << "/" << denominator;
 		if (integer && numerator)cout << ")";
-		if (integer == 0 && numerator == 0)cout << 0;
+		if (integer == 0 && numerator == 0)cout << 0;*/
+		cout << integer << "(" << numerator << "/" << denominator << ")" << endl;
 		cout << endl;
 	}
 
@@ -370,10 +411,18 @@ void main()
 
 	Fraction A(2, 3, 4);
 	cout << A << endl;
-	int a = (int)A;
+	int a = A;
 	cout << "a = " << a << endl;
 	double b = A;
 	cout << "b = " << b << endl;
+	//Fraction C = 2.5;
+	//cout << C << endl;
+	cout << INT_MAX << endl;
+	cout << UINT_MAX << endl;
+
+	Fraction B = 3;
+	B.print();
+	cout << B << endl;
 #endif // TYPE_CONVERSIONS
 
 }
