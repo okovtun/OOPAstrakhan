@@ -11,8 +11,8 @@ http://cplusplus.com/doc/tutorial/typecasting/
 TODO:
 Реализовать класс String, описывающий строку.
 Класс должен позволять  создавать обекты следующим образом:
-String str;	//Создается пустая строка размером 80 Байт
-String str1 = "Hello";
+String str;	//Создается пустая строка размером 80 Байт	DONE
+String str1 = "Hello";				DONE
 String str2;
 cin >> str2;
 String str3 = str1 + str2;
