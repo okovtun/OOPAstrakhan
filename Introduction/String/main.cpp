@@ -27,29 +27,26 @@ public:
 		return str;
 	}
 	//			Constructors:
-	explicit String(unsigned int size = 80)
+	explicit String(unsigned int size = 80) :size(size), str(new char[size] {})
 	{
-		this->size = size;
+		//this->size = size;
 		this->str = new char[size] {};
 		cout << "SizeConstructor:" << this << endl;
 	}
-	String(const char str[])
+	String(const char str[]) :size(strlen(str) + 1), str(new char[size] {})
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		//this->size = strlen(str) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; str[i]; i++)this->str[i] = str[i];
 		cout << "Constructor:\t" << this << endl;
 	}
-	String(const String& other)
+	String(const String& other) :size(other.size), str(new char[size] {})
 	{
-		this->size = other.size;
-		//this->str = other.str;	//Shallow copy
-		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];	//Побитовое (поэлементное, побайтовое) копирование.
 																	//Deep copy.
 		cout << "CopyConstructor:" << this << endl;
 	}
-	String(String&& other)
+	String(String&& other):size(other.size), str(other.str)
 	{
 		//MoveConstructor должен работать так, как НЕ должен работать CopyConstractor, то есть,
 		//CopyConstructor должен выполнять DeepCopy
@@ -59,8 +56,6 @@ public:
 		//он берет память временного безымянного объекта, и передает ее создаваемому объекту.
 		//При этом, временный объект должен потерять доступ к своему значению.
 		//C++11
-		this->size = other.size;
-		this->str = other.str;
 		other.str = nullptr;
 		cout << "MoveConstructor:" << this << endl;
 	}
@@ -71,7 +66,7 @@ public:
 	}
 
 	//			Operators:
-	String& operator=(const String& other)
+	String& operator=(const String& other)//:size(other.size) //Список инициализации можно использовать только в конструкторах
 	{
 		//0) Проверяем, не является ли this и other одним и тем же объектом:
 		if (this == &other)return *this;
@@ -140,7 +135,7 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 
 //#define CONSTRUCTORS_CHECK
 //#define INPUT_CHECK
-//#define OPERATOR_PLUS_CHECK
+#define OPERATOR_PLUS_CHECK
 //#define HOW_CAN_WE_CALL_CONSTRUCTORS
 
 void main()
@@ -182,6 +177,9 @@ void main()
 
 	str1 += str2;
 	cout << str1 << endl;
+
+	String str3 = str1;
+	cout << str3 << endl;
 #endif // OPERATOR_PLUS_CHECK
 
 #ifdef HOW_CAN_WE_CALL_CONSTRUCTORS
