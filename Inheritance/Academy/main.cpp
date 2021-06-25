@@ -2,6 +2,8 @@
 #include<string>
 using namespace std;
 
+#define delimiter "\n-----------------------------------------------------\n"
+
 class Human
 {
 protected:
@@ -41,17 +43,24 @@ public:
 		set_age(age);
 		cout << "HConstructor:\t" << this << endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
 		cout << "HDestructor:\t" << this << endl;
 	}
 
 	//				Methods:
-	void print()
+	virtual void print()
 	{
+		//Pointers to virtual functions.
 		cout << last_name << " " << first_name << " " << age << " лет.\n";
 	}
 };
+
+ostream& operator<<(ostream& os, const Human& obj)
+{
+	os << obj.get_last_name() << " " << obj.get_first_name() << ", " << obj.get_age() << " лет";
+	return os;
+}
 
 class Student :public Human
 {
@@ -109,7 +118,14 @@ public:
 	}
 };
 
-class Teacher : Human
+ostream& operator<<(ostream& os, const Student& obj)
+{
+	os << (Human&)obj << " ";
+	os << "специальность: " << obj.get_specialty() << ", группа: " << obj.get_group() << ", успеваемость: " << obj.get_rating();
+	return os;
+}
+
+class Teacher : public Human
 {
 	string specialty;
 	unsigned int experience;
@@ -154,18 +170,65 @@ public:
 		cout << "специальность: " << specialty << ", опыт преподавания: " << experience << " лет" << endl;
 	}
 };
+ostream& operator<<(ostream& os, const Teacher& obj)
+{
+	os << (Human&)obj << " ";
+	os << ", специальность: " << obj.get_specialty() 
+		<< ", опыт преподавания: " << obj.get_experience() << " лет";
+	return os;
+}
+
+//#define INHERITANCE_BASICS
 
 void main()
 {
 	setlocale(LC_ALL, "Russian");
+#ifdef INHERITANCE_BASICS
 	/*Human human("Тупенко", "Василий", 18);
-	human.print();*/
+human.print();*/
 	Student stud("Тупенко", "Василий", 18, "РПО", "BV_123", 43.4);
 	stud.print();
 	Teacher Albert("Einstein", "Albert", 150, "Astrophisics", 120);
 	Albert.print();
 	cout << Albert.get_last_name() << endl;
-	//Albert.get_first_name();
+	Albert.get_first_name();
+#endif // INHERITANCE_BASICS
+
+
+	//Polymorphism (poly - много, morphis - форма)
+	//UPCAST - обобщение. Upcast - это приветедие конкретного типа (Cat)
+	//к абстрактному (общему) типу (Animal).
+	//DOWNCAST - приведение (преобразование) абстракного (общего) типа 
+	//к конктерному (частному) типу.
+
+
+	//				POINTERS TO BASE CLASS
+	Human* group[] =
+	{
+		new Student("Васильев", "Александр", 23, "РПО", "ПВ_011", 90),
+		new Student("Васильева", "Маргарита", 25, "РПО", "ПВ_011", 90),
+		new Teacher("Ковтун", "Олег", 36, "Разработка приложений на C++", 6),
+		new Student("Ивлев", "Александр", 25, "РПО", "ПВ_011", 95),
+		new Student("Рахманин", "Николай", 28, "РПО", "ПВ_011", 98),
+		new Teacher("Романов", "Андрей", 30, "HardwarePC", 5),
+		new Student("Нусс", "Дмирий", 22, "РПО", "ПВ_011", 100),
+		new Student("Борн", "Евгений", 35, "РПО", "ПВ_011", 99),
+	};
+
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		//group[i]->print();
+		//cout << *group[i] << endl;
+		//cout << typeid(*group[i]).name() << endl;
+		if (typeid(*group[i]) == typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
+		if (typeid(*group[i]) == typeid(Teacher))cout << *dynamic_cast<Teacher*>(group[i]) << endl;
+		cout << delimiter << endl;
+	}
+
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		delete group[i];
+	}
 }
 
 /*

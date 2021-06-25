@@ -17,7 +17,7 @@
   <Class Name="Teacher">
     <Position X="0.5" Y="2.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAUAAAAAAAAAAAAAABAAAAMAAAAAAACAACBAAgAAAAA=</HashCode>
+      <HashCode>AAUgAAAAAAAAAAAAABAAAAMAAAAAAACAACBAAgAAAAA=</HashCode>
       <FileName>main.cpp</FileName>
     </TypeIdentifier>
   </Class>
