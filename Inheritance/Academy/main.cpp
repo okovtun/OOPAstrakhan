@@ -4,6 +4,8 @@ using namespace std;
 
 #define delimiter "\n-----------------------------------------------------\n"
 
+#define OSTREAM_FOR_HUMAN_ONLT
+
 class Human
 {
 protected:
@@ -49,17 +51,17 @@ public:
 	}
 
 	//				Methods:
-	virtual void print()
+	virtual ostream& print(ostream& os) const
 	{
 		//Pointers to virtual functions.
-		cout << last_name << " " << first_name << " " << age << " лет.\n";
+		return os << last_name << " " << first_name << " " << age << " лет.";
 	}
 };
 
 ostream& operator<<(ostream& os, const Human& obj)
 {
-	os << obj.get_last_name() << " " << obj.get_first_name() << ", " << obj.get_age() << " лет";
-	return os;
+	//os << obj.get_last_name() << " " << obj.get_first_name() << ", " << obj.get_age() << " лет";
+	return obj.print(os);
 }
 
 class Student :public Human
@@ -111,19 +113,21 @@ public:
 	}
 
 	//				Methods:
-	void print()
+	ostream& print(ostream& os) const
 	{
-		Human::print();
-		cout << "специальность: " << specialty << ", группа: " << group << ", успеваемость: " << rating << endl;
+		Human::print(os);
+		return os << "специальность: " << specialty << ", группа: " << group << ", успеваемость: " << rating;
 	}
 };
 
+#ifndef OSTREAM_FOR_HUMAN_ONLT
 ostream& operator<<(ostream& os, const Student& obj)
 {
-	os << (Human&)obj << " ";
-	os << "специальность: " << obj.get_specialty() << ", группа: " << obj.get_group() << ", успеваемость: " << obj.get_rating();
-	return os;
+	//os << (Human&)obj << " ";
+	//os << "специальность: " << obj.get_specialty() << ", группа: " << obj.get_group() << ", успеваемость: " << obj.get_rating();
+	return obj.print(os);
 }
+#endif // !OSTREAM_FOR_HUMAN_ONLT
 
 class Teacher : public Human
 {
@@ -164,19 +168,23 @@ public:
 		//cout << "TDestructor:\t" << this << endl;
 	}
 	//			Methods:
-	void print()
+	ostream& print(ostream& os) const
 	{
-		Human::print();
-		cout << "специальность: " << specialty << ", опыт преподавани€: " << experience << " лет" << endl;
+		Human::print(os);
+		return os << "специальность: " << specialty << ", опыт преподавани€: " << experience << " лет.";
 	}
 };
+#ifndef OSTREAM_FOR_HUMAN_ONLT
 ostream& operator<<(ostream& os, const Teacher& obj)
 {
-	os << (Human&)obj << " ";
+	/*os << (Human&)obj << " ";
 	os << ", специальность: " << obj.get_specialty()
 		<< ", опыт преподавани€: " << obj.get_experience() << " лет";
-	return os;
+	return os;*/
+	return obj.print(os);
 }
+#endif // !OSTREAM_FOR_HUMAN_ONLT
+
 
 class Graduate :public Student
 {
@@ -205,19 +213,22 @@ public:
 	{
 		cout << "GDestructor:\t" << this << endl;
 	}
-	void print()
+	ostream& print(ostream& os) const
 	{
-		Student::print();
-		cout << "“ема дипломного проекта: " << subject << endl;
+		Student::print(os);
+		return os << ".\n“ема дипломного проекта: " << subject << ";";
 	}
 };
-
+#ifndef OSTREAM_FOR_HUMAN_ONLT
 ostream& operator<<(ostream& os, const Graduate& obj)
 {
-	os << (Student&)obj;
-	return os << ". “ема диплома: " << obj.get_subject();
+	/*os << (Student&)obj;
+	return os << ". “ема диплома: " << obj.get_subject();*/
+	return obj.print(os);
 }
+#endif // !OSTREAM_FOR_HUMAN_ONLT
 
+//#ifndef - IF NOT DEFINED
 //#define INHERITANCE_BASICS
 
 void main()
@@ -258,9 +269,10 @@ human.print();*/
 		//group[i]->print();
 		//cout << *group[i] << endl;
 		//cout << typeid(*group[i]).name() << endl;
-		if (typeid(*group[i]) == typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
+		/*if (typeid(*group[i]) == typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
 		if (typeid(*group[i]) == typeid(Teacher))cout << *dynamic_cast<Teacher*>(group[i]) << endl;
-		if (typeid(*group[i]) == typeid(Graduate))cout << *dynamic_cast<Graduate*>(group[i]) << endl;
+		if (typeid(*group[i]) == typeid(Graduate))cout << *dynamic_cast<Graduate*>(group[i]) << endl;*/
+		cout << *group[i] << endl;
 		//cout << delimiter << endl;
 	}
 
