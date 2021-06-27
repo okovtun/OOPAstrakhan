@@ -6,113 +6,143 @@ using std::endl;
 #define tab "\t"
 #define delimiter "\n-------------------------------------------------------\n"
 
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////		CLASS DECLARATION (ОБЪЯВЛЕНИЕ КЛАССА)		/////////////////////
+
 class String;
 String operator+(const String& left, const String& right);
 
-class String
+class String	//Описание класса
 {
 	unsigned int size;	//Размер строки в Байтах.
 	char* str;			//Указатель на строку в динамической памяти.
 public:
-	unsigned int get_size()const
-	{
-		return size;
-	}
-	const char* get_str()const
-	{
-		return str;
-	}
-	char* get_str()
-	{
-		return str;
-	}
+	unsigned int get_size()const;
+	const char* get_str()const;
+	char* get_str();
 	//			Constructors:
-	explicit String(unsigned int size = 80) :size(size), str(new char[size] {})
-	{
-		//this->size = size;
-		//this->str = new char[size] {};
-		cout << "SizeConstructor:" << this << endl;
-	}
-	String(const char str[]) :String(strlen(str) + 1)
-	{
-		for (int i = 0; str[i]; i++)this->str[i] = str[i];
-		cout << "Constructor:\t" << this << endl;
-	}
-	String(const String& other):String(other.str)
-	{
-		//this->size = other.size;
-		////this->str = other.str;	//Shallow copy
-		//this->str = new char[size] {};
-		//for (int i = 0; i < size; i++)this->str[i] = other.str[i];	//Побитовое (поэлементное, побайтовое) копирование.
-		//															//Deep copy.
-		cout << "CopyConstructor:" << this << endl;
-	}
-	String(String&& other)
-	{
-		//MoveConstructor должен работать так, как НЕ должен работать CopyConstractor, то есть,
-		//CopyConstructor должен выполнять DeepCopy
-		//MoveConstructor должен выполнять ShallowCopy, 
-		//то есть копировать только адрес на уже выделенную память
-		//MoveConstructor НЕ ДОЛЖЕН ВЫДЕЛЯТЬ ДИНАМИЧЕСКУЮ ПАМЯТЬ!!!
-		//он берет память временного безымянного объекта, и передает ее создаваемому объекту.
-		//При этом, временный объект должен потерять доступ к своему значению.
-		//C++11
-		this->size = other.size;
-		this->str = other.str;
-		other.str = nullptr;
-		cout << "MoveConstructor:" << this << endl;
-	}
-	~String()
-	{
-		delete[] this->str;
-		cout << "Destructor:\t" << this << endl;
-	}
+	explicit String(unsigned int size = 80);
+	String(const char str[]);
+	String(const String& other);
+	String(String&& other);
+	~String();
 
 	//			Operators:
-	String& operator=(const String& other)
-	{
-		//0) Проверяем, не является ли this и other одним и тем же объектом:
-		if (this == &other)return *this;
-		//1) Удаляем старое значение объекта:
-		delete[] this->str;
-		//2) Выполняем копирование:
-		this->size = other.size;
-		//this->str = other.str;	//Shallow copy
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)this->str[i] = other.str[i];	//Побитовое (поэлементное, побайтовое) копирование.
-																	//Deep copy.
-		cout << "CopyAssignment:\t" << this << endl;
-		return *this;
-	}
-	String& operator=(String&& other)
-	{
-		delete[] this->str;
-		this->size = other.size;
-		this->str = other.str;
-		other.str = nullptr;
-		cout << "MoveAssignment:\t" << this << endl;
-		return *this;
-	}
-	String& operator+=(const String& other)
-	{
-		return *this = *this + other;
-	}
-	const char& operator[](unsigned int i)const
-	{
-		return str[i];
-	}
-	char& operator[](unsigned int i)
-	{
-		return str[i];
-	}
+	String& operator=(const String& other);
+	String& operator=(String&& other);
+	String& operator+=(const String& other);
+	const char& operator[](unsigned int i)const;
+	char& operator[](unsigned int i);
 
 	//			Methods:
-	void print()const
-	{
-		cout << "Size:" << size << endl;
-		cout << "Str: " << str << endl;
-	}
+	void print()const;
 };
+
+////////////		CLASS DECLARATION END (КОНЕЦ ОБЪЯВЛЕНИЯ КЛАССА)		/////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////		CLASS DEFINITION (ОПРЕДЕЛЕНИЕ КЛАССА)		/////////////////////
+
+unsigned int String::get_size()const
+{
+	return size;
+}
+const char* String::get_str()const
+{
+	return str;
+}
+char* String::get_str()
+{
+	return str;
+}
+//			Constructors:
+explicit String::String(unsigned int size = 80) :size(size), str(new char[size] {})
+{
+	//this->size = size;
+	//this->str = new char[size] {};
+	cout << "SizeConstructor:" << this << endl;
+}
+String::String(const char str[]) :String(strlen(str) + 1)
+{
+	for (int i = 0; str[i]; i++)this->str[i] = str[i];
+	cout << "Constructor:\t" << this << endl;
+}
+String::String(const String& other) :String(other.str)
+{
+	//this->size = other.size;
+	////this->str = other.str;	//Shallow copy
+	//this->str = new char[size] {};
+	//for (int i = 0; i < size; i++)this->str[i] = other.str[i];	//Побитовое (поэлементное, побайтовое) копирование.
+	//															//Deep copy.
+	cout << "CopyConstructor:" << this << endl;
+}
+String::String(String&& other)
+{
+	//MoveConstructor должен работать так, как НЕ должен работать CopyConstractor, то есть,
+	//CopyConstructor должен выполнять DeepCopy
+	//MoveConstructor должен выполнять ShallowCopy, 
+	//то есть копировать только адрес на уже выделенную память
+	//MoveConstructor НЕ ДОЛЖЕН ВЫДЕЛЯТЬ ДИНАМИЧЕСКУЮ ПАМЯТЬ!!!
+	//он берет память временного безымянного объекта, и передает ее создаваемому объекту.
+	//При этом, временный объект должен потерять доступ к своему значению.
+	//C++11
+	this->size = other.size;
+	this->str = other.str;
+	other.str = nullptr;
+	cout << "MoveConstructor:" << this << endl;
+}
+String::~String()
+{
+	delete[] this->str;
+	cout << "Destructor:\t" << this << endl;
+}
+
+//			Operators:
+String& String::operator=(const String& other)
+{
+	//0) Проверяем, не является ли this и other одним и тем же объектом:
+	if (this == &other)return *this;
+	//1) Удаляем старое значение объекта:
+	delete[] this->str;
+	//2) Выполняем копирование:
+	this->size = other.size;
+	//this->str = other.str;	//Shallow copy
+	this->str = new char[size] {};
+	for (int i = 0; i < size; i++)this->str[i] = other.str[i];	//Побитовое (поэлементное, побайтовое) копирование.
+																//Deep copy.
+	cout << "CopyAssignment:\t" << this << endl;
+	return *this;
+}
+String& String::operator=(String&& other)
+{
+	delete[] this->str;
+	this->size = other.size;
+	this->str = other.str;
+	other.str = nullptr;
+	cout << "MoveAssignment:\t" << this << endl;
+	return *this;
+}
+String& String::operator+=(const String& other)
+{
+	return *this = *this + other;
+}
+const char& String::operator[](unsigned int i)const
+{
+	return str[i];
+}
+char& String::operator[](unsigned int i)
+{
+	return str[i];
+}
+
+//			Methods:
+void String::print()const
+{
+	cout << "Size:" << size << endl;
+	cout << "Str: " << str << endl;
+}
 
 String operator+(const String& left, const String& right)
 {
@@ -135,6 +165,9 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 //{
 //	return is >> obj.get_str();
 //}
+
+////////////		CLASS DEFINITION END (КОНЕЦ ОПРЕДЕЛЕНИЯ КЛАССА)		/////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 
 //#define CONSTRUCTORS_CHECK
 //#define INPUT_CHECK
