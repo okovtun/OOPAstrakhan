@@ -173,9 +173,49 @@ public:
 ostream& operator<<(ostream& os, const Teacher& obj)
 {
 	os << (Human&)obj << " ";
-	os << ", специальность: " << obj.get_specialty() 
+	os << ", специальность: " << obj.get_specialty()
 		<< ", опыт преподавания: " << obj.get_experience() << " лет";
 	return os;
+}
+
+class Graduate :public Student
+{
+	string subject;
+	//Teacher instructor;
+public:
+	const string& get_subject()const
+	{
+		return subject;
+	}
+	void set_subject(const string& subject)
+	{
+		this->subject = subject;
+	}
+	Graduate
+	(
+		const string& last_name, const string& first_name, unsigned int age,
+		const string& specialty, const string& group, double rating,
+		const string& subject
+	) :Student(last_name, first_name, age, specialty, group, rating)
+	{
+		set_subject(subject);
+		cout << "GConstructor:\t" << this << endl;
+	}
+	~Graduate()
+	{
+		cout << "GDestructor:\t" << this << endl;
+	}
+	void print()
+	{
+		Student::print();
+		cout << "Тема дипломного проекта: " << subject << endl;
+	}
+};
+
+ostream& operator<<(ostream& os, const Graduate& obj)
+{
+	os << (Student&)obj;
+	return os << ". Тема диплома: " << obj.get_subject();
 }
 
 //#define INHERITANCE_BASICS
@@ -194,13 +234,11 @@ human.print();*/
 	Albert.get_first_name();
 #endif // INHERITANCE_BASICS
 
-
 	//Polymorphism (poly - много, morphis - форма)
 	//UPCAST - обобщение. Upcast - это приветедие конкретного типа (Cat)
 	//к абстрактному (общему) типу (Animal).
 	//DOWNCAST - приведение (преобразование) абстракного (общего) типа 
 	//к конктерному (частному) типу.
-
 
 	//				POINTERS TO BASE CLASS
 	Human* group[] =
@@ -209,7 +247,7 @@ human.print();*/
 		new Student("Васильева", "Маргарита", 25, "РПО", "ПВ_011", 90),
 		new Teacher("Ковтун", "Олег", 36, "Разработка приложений на C++", 6),
 		new Student("Ивлев", "Александр", 25, "РПО", "ПВ_011", 95),
-		new Student("Рахманин", "Николай", 28, "РПО", "ПВ_011", 98),
+		new Graduate("Рахманин", "Николай", 28, "РПО", "ПВ_011", 98, "Разработка кросплатформенной обучающей игры"),
 		new Teacher("Романов", "Андрей", 30, "HardwarePC", 5),
 		new Student("Нусс", "Дмирий", 22, "РПО", "ПВ_011", 100),
 		new Student("Борн", "Евгений", 35, "РПО", "ПВ_011", 99),
@@ -222,7 +260,8 @@ human.print();*/
 		//cout << typeid(*group[i]).name() << endl;
 		if (typeid(*group[i]) == typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
 		if (typeid(*group[i]) == typeid(Teacher))cout << *dynamic_cast<Teacher*>(group[i]) << endl;
-		cout << delimiter << endl;
+		if (typeid(*group[i]) == typeid(Graduate))cout << *dynamic_cast<Graduate*>(group[i]) << endl;
+		//cout << delimiter << endl;
 	}
 
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
