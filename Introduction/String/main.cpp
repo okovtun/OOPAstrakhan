@@ -198,4 +198,5 @@ void main()
 	String str6{};	//Явный вызов конструктора по умолчанию.	  
 #endif // HOW_CAN_WE_CALL_CONSTRUCTORS
 
+	Human vasya("1024byte", "Vasily123", 500824)
 }
