@@ -4,11 +4,13 @@
 
 using namespace std;
 
-#define NAME_CHECK
+//#define NAME_CHECK
+#define EMAIL_CHECK
 
 void main()
 {
 	setlocale(LC_ALL, "Russian");
+#ifdef NAME_CHECK
 	std::string last_name = "Tupenko";
 	std::string first_name = "Vasya";
 	//cout << "¬ведите фамилию, им€: "; cin >> last_name >> first_name;
@@ -30,4 +32,32 @@ void main()
 	{
 		cout << "Bad name!!!" << endl;
 	}
+#endif // NAME_CHECK
+
+#ifdef EMAIL_CHECK
+	string email;
+		cout << "Type your E-mail: "; cin >> email;
+	/*do
+	{
+		if (email.find('@') == std::string::npos || email.size() < 8)cout << "Not E-mail, try again. ";
+	} while (email.find('@') == std::string::npos || email.size() < 8);*/
+	try
+	{
+		//std::regex rgx("[A-Za-z.{1}0-9]{3,30}@[A-Za-z]{1,20}.[A-Za-z]{2,5}");//
+		std::regex rgx("(\\w+)(\\.?)(\\w*)@(\\w+)((\\.)(\\w){2,5})+");//
+		if (std::regex_match(email, rgx))
+		{
+			cout << "E-mail OK:" << email << endl;
+		}
+		else
+		{
+			cout << "Bad E-mail" << endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << endl;
+	}
+#endif // EMAIL_CHECK
+	main();
 }

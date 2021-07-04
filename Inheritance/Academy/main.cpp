@@ -12,6 +12,9 @@ using namespace std;
 	Phone;
 */
 
+//(Pure virtual function)
+// virtual type name(parameters) = 0;
+
 class Human
 {
 protected:
