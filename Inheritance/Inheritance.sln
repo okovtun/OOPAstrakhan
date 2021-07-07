@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Academy", "Academy\Academy.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Geometry", "Geometry\Geometry.vcxproj", "{3AFBDFD9-7ED2-419D-870E-5DE65E2AB157}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BornGeometry", "BornGeometry\BornGeometry.vcxproj", "{B4E3179C-CC06-470C-83FB-289B20D0DF3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{3AFBDFD9-7ED2-419D-870E-5DE65E2AB157}.Release|x64.Build.0 = Release|x64
 		{3AFBDFD9-7ED2-419D-870E-5DE65E2AB157}.Release|x86.ActiveCfg = Release|Win32
 		{3AFBDFD9-7ED2-419D-870E-5DE65E2AB157}.Release|x86.Build.0 = Release|Win32
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Debug|x64.ActiveCfg = Debug|x64
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Debug|x64.Build.0 = Debug|x64
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Debug|x86.ActiveCfg = Debug|Win32
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Debug|x86.Build.0 = Debug|Win32
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Release|x64.ActiveCfg = Release|x64
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Release|x64.Build.0 = Release|x64
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Release|x86.ActiveCfg = Release|Win32
+		{B4E3179C-CC06-470C-83FB-289B20D0DF3D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

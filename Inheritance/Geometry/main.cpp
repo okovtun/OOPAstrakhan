@@ -219,7 +219,7 @@ namespace Geometry
 			//		 5 - толщина в 5 писелов, 
 			//color (обычно задается RGB(100, 200, 150))
 
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(black);
 
 			//3) Выбираем на чем, и чем будем рисовать:
 			SelectObject(hdc, hPen);
