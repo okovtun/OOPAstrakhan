@@ -1,5 +1,8 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 /*
 TODO:
@@ -43,25 +46,56 @@ public:
 		this->size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
+	explicit ForwardList(size_t size) :ForwardList()
+	{
+		while (size--)push_front(0);
+	}
+	ForwardList(const ForwardList& other) :ForwardList()
+	{
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "LCopyConstructor:" << this << endl;
+	}
 	~ForwardList()
 	{
+		while (Head)pop_front();
 		cout << "LDestructor:\t" << this << endl;
+	}
+
+	//			Operators:
+	ForwardList& operator=(const ForwardList& other)
+	{
+		//0) Проверяем, НЕ является ли this и other одним и тем же объектом:
+		if (this == &other)return *this;
+		//1) Удаляем старое значение объекта:
+		while (Head)pop_front();
+		//2) Копируем ТОТ список в ЭТОТ список:
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		cout << "LCopyAssignment:\t" << this << endl;
+		return *this;
+	}
+
+	int& operator[](size_t index)
+	{
+		if (index >= size)throw std::exception("Error: Out of range");
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)Temp = Temp->pNext;
+		return Temp->Data;
 	}
 
 	//			Adding elements:
 	void push_front(int Data)
 	{
 		//Добавление элемента в начало списка:
-		
-		//1) Создаем элемент:
-		Element* New = new Element(Data);
-
-		//2) Прикрепляем новый элемент к списку:
-		New->pNext = Head;
-
-		//3) Адрес нового элемента помещаем в голову, 
-		Head = New;
-		//после чего, новый элемент является начальным элементом списка
+		////1) Создаем элемент:
+		//Element* New = new Element(Data);
+		////2) Прикрепляем новый элемент к списку:
+		//New->pNext = Head;
+		////3) Адрес нового элемента помещаем в голову, 
+		//Head = New;
+		////после чего, новый элемент является начальным элементом списка
+		Head = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
@@ -74,7 +108,7 @@ public:
 		}
 		//1)Создать новый элемент:
 		//Element* New = new Element(Data);
-		
+
 		//2)Дойти до конца списка (до последнего элемента):
 		Element* Temp = Head;
 		while (Temp->pNext)
@@ -98,8 +132,9 @@ public:
 		//Temp - Предыдущий элемент, тоносительно того элемента, на место которого нужно сделать вставку.
 		//Temp->pNext - элемент, на место которого мы вставляет новый элемент.
 		//Temp->pNext и все последующие элементы будут сдвинуты на 1 позицию вправо.
-		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		/*New->pNext = Temp->pNext;
+		Temp->pNext = New;*/
+		Temp->pNext = new Element(Data, Temp->pNext);
 		size++;
 	}
 
@@ -108,10 +143,8 @@ public:
 	{
 		//1) Запоминаем адрес удаляемого элемента:
 		Element* Temp = Head;
-
 		//2) Смещаем Голову на следубщий элемент списка:
 		Head = Head->pNext;
-
 		//3) Удаляем элемент из памяти:
 		delete Temp;
 		size--;
@@ -130,13 +163,19 @@ public:
 	//			Methods:
 	void print()const
 	{
-		Element* Temp = Head;	//Temp - это итератор.
+		/*Element* Temp = Head;	//Temp - это итератор.
 		//Итератор - это указатель, при помощи которого можно получить доступ к элементам структуры данных.
 		while (Temp)
 		{
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 			Temp = Temp->pNext;	//Переход на следующий элемент.
-		}
+		}*/
+
+		//for(Start; Stop; Step)....;
+		//for(Counter; Condition; Expression)....;
+		//for(Iterator; Condition; Expression)....;
+		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов:  " << Element::count << endl;
 	}
@@ -155,8 +194,8 @@ void main()
 	ForwardList list;
 	for (int i = 0; i < n; i++)
 	{
-		//list.push_front(rand() % 100);
-		list.push_back(rand() % 100);
+		list.push_front(rand() % 100);
+		//list.push_back(rand() % 100);
 	}
 	list.push_back(123);
 	list.print();
@@ -179,11 +218,23 @@ void main()
 #endif // BASE_CHECK
 
 #ifdef SIZE_CONSTRUCTOR_AND_SUBSCRIPT
+	//int n; cout << "Введите размер списка: "; cin >> n;
+	//ForwardList list(n);	//Создается список на n элементов
+	//for (int i = 0; i < list.get_size(); i++)cout << list[i] << tab;
+	//for (int i = 0; i < list.get_size(); i++)list[i] = rand() % 100;
+	//for (int i = 0; i < list.get_size(); i++)cout << list[i] << tab;
 	int n; cout << "Введите размер списка: "; cin >> n;
-	ForwardList list(n);	//Создается список на n элементов
-	for (int i = 0; i < list.get_size(); i++)cout << list[i] << tab;
-	for (int i = 0; i < list.get_size(); i++)list[i]=rand()%100;
-	for (int i = 0; i < list.get_size(); i++)cout << list[i] << tab;
+	ForwardList list(n);
+	try
+	{
+		for (int i = 0; i < n; i++)	list[i] = rand() % 100;
+		for (int i = 0; i < n * 2; i++)	cout << list[i] << tab;
+		cout << endl;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << endl;
+	}
 #endif // SIZE_CONSTRUCTOR_AND_SUBSCRIPT
 
 #ifdef COPY_METHODS
@@ -193,13 +244,16 @@ void main()
 	list.push_back(8);
 	list.push_back(13);
 	list.push_back(21);
-	//list.print();
 
-	ForwardList list2 = list;
+	list = list;
+
+	list.print();
+
+	ForwardList list2 = list;	//CopyConstructor
 	list2.print();
 
-	ForwardList list3;
-	list3 = list2;
+	ForwardList list3;	//Default constructor
+	list3 = list2;	//Copy assignment
 	list3.print();
 #endif // COPY_METHODS
 
@@ -209,5 +263,6 @@ void main()
 		cout << i << tab;
 	cout << endl;
 #endif // INIT_LIST_LIKE_ARRAY
+
 
 }
