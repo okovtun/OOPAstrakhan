@@ -10,6 +10,18 @@ https://drive.google.com/drive/folders/1mIhAKMp5-Jpy6s5X8u924tRCXFEdHE_z?usp=sha
 //////////////////////////////////////////////////////////////////////////////////////
 
 TODO:
+1. Написать метод void erase();
+2. Проверочный код в секциях 
+	HARDCORE;	//Для этого нужен итератор 
+	COPY_CONSTRUCTOR_CHECK;
+	COPY_ASSIGNMENT_CHECK;
+   должен заработать;
+3. Написать класс ReverseIterstor, который позволит перемещаться по списку в обратном направлении 
+   (от Хвоста до Головы);
+
+//	ForwardList DONE
+
+DONE:
 1. В класс ForwardList добавить методы:
 	void pop_front();			DONE
 	void pop_back();			DONE
