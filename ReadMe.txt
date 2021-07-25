@@ -10,6 +10,12 @@ https://drive.google.com/drive/folders/1mIhAKMp5-Jpy6s5X8u924tRCXFEdHE_z?usp=sha
 //////////////////////////////////////////////////////////////////////////////////////
 
 TODO:
+От ветки InheritIteratorInList2 создать ветку SeparatedList2withInheritIterator 
+и в этой разделить классы на файлы. Сделать это в 2 commit-а:
+1. Methods out of class: просто вынести методы за пределы класса в пределах файла main.cpp;
+2. Вынести класса в отдельные файлы: List.h, List.cpp;
+
+DONE:
 1. Написать метод void erase();
 2. Проверочный код в секциях 
 	HARDCORE;	//Для этого нужен итератор 
