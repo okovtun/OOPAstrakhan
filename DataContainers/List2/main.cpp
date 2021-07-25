@@ -31,36 +31,69 @@ class List
 #ifdef DEBUG
 			cout << "EConstructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 		~Element()
 		{
 #ifdef DEBUG
 			cout << "EDestructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 		friend class List;
 	}*Head, *Tail;
 	size_t size;
-public:
-	class Iterator
+
+	class BaseIterator
 	{
+	protected:
 		Element* Temp;
 	public:
-		Iterator(Element* Temp = nullptr) :Temp(Temp)
+		BaseIterator(Element* Temp) :Temp(Temp)
+		{
+#ifdef DEBUG
+			cout << "BItConstructor:\t" << this << endl;
+#endif // DEBUG
+		}
+		~BaseIterator()
+		{
+#ifdef DEBUG
+			cout << "BItDestructor:\t" << this << endl;
+#endif // DEBUG
+		}
+
+		//			Operators:
+		bool operator==(const BaseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const BaseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
+public:
+	class Iterator :public BaseIterator
+	{
+	public:
+		Iterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
 #ifdef DEBUG
 			cout << "ItConstructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 		~Iterator()
 		{
 #ifdef DEBUG
 			cout << "ItDestructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 
 		Iterator& operator++()	//Prefix increment
@@ -85,42 +118,21 @@ public:
 			Temp = Temp->pPrev;
 			return old;
 		}
-
-		bool operator==(const Iterator& other)const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const Iterator& other)const
-		{
-			return this->Temp != other.Temp;
-		}
-
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
-		int& operator*()
-		{
-			return Temp->Data;
-		}
 	};
-	class ReverseIterator
+	class ReverseIterator :public BaseIterator
 	{
-		Element* Temp;
 	public:
-		ReverseIterator(Element* Temp = nullptr) :Temp(Temp)
+		ReverseIterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
 #ifdef DEBUG
 			cout << "RItConstructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 		~ReverseIterator()
 		{
 #ifdef DEBUG
 			cout << "RItDestructor:\t" << this << endl;
 #endif // DEBUG
-
 		}
 
 		ReverseIterator& operator++()
@@ -145,25 +157,6 @@ public:
 			Temp = Temp->pNext;
 			return old;
 		}
-
-		bool operator==(const ReverseIterator& other)const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const ReverseIterator& other)const
-		{
-			return this->Temp != other.Temp;
-		}
-
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
-		int& operator*()
-		{
-			return Temp->Data;
-		}
-
 	};
 	Iterator begin()
 	{
@@ -333,7 +326,7 @@ public:
 	void reverse_print()const
 	{
 		cout << "Tail:" << Tail << endl;
-		for(Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Количество элементов списка: " << size << endl;
 	}
