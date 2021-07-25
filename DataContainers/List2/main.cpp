@@ -5,6 +5,18 @@ using std::endl;
 
 #define tab "\t"
 
+/*
+TODO:
+1. Написать метод void erase();
+2. Проверочный код в секциях
+	HARDCORE;	//Для этого нужен итератор
+	COPY_CONSTRUCTOR_CHECK;
+	COPY_ASSIGNMENT_CHECK;
+   должен заработать;
+3. Написать класс ReverseIterstor, который позволит перемещаться по списку в обратном направлении
+   (от Хвоста до Головы);
+*/
+
 class List
 {
 	class Element
@@ -16,16 +28,159 @@ class List
 		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
 			Data(Data), pNext(pNext), pPrev(pPrev)
 		{
+#ifdef DEBUG
 			cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		~Element()
 		{
+#ifdef DEBUG
 			cout << "EDestructor:\t" << this << endl;
+#endif // DEBUG
+
 		}
 		friend class List;
 	}*Head, *Tail;
 	size_t size;
 public:
+	class Iterator
+	{
+		Element* Temp;
+	public:
+		Iterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+#ifdef DEBUG
+			cout << "ItConstructor:\t" << this << endl;
+#endif // DEBUG
+
+		}
+		~Iterator()
+		{
+#ifdef DEBUG
+			cout << "ItDestructor:\t" << this << endl;
+#endif // DEBUG
+
+		}
+
+		Iterator& operator++()	//Prefix increment
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		Iterator operator++(int)
+		{
+			Iterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+		Iterator& operator--()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		Iterator operator--(int)
+		{
+			Iterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+
+		bool operator==(const Iterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const Iterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
+	class ReverseIterator
+	{
+		Element* Temp;
+	public:
+		ReverseIterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+#ifdef DEBUG
+			cout << "RItConstructor:\t" << this << endl;
+#endif // DEBUG
+
+		}
+		~ReverseIterator()
+		{
+#ifdef DEBUG
+			cout << "RItDestructor:\t" << this << endl;
+#endif // DEBUG
+
+		}
+
+		ReverseIterator& operator++()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ReverseIterator& operator--()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		ReverseIterator operator++(int)
+		{
+			ReverseIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+		ReverseIterator operator--(int)
+		{
+			ReverseIterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+
+		bool operator==(const ReverseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const ReverseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+
+	};
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
+	ReverseIterator rbegin()
+	{
+		return Tail;
+	}
+	ReverseIterator rend()
+	{
+		return nullptr;
+	}
 	size_t get_size()const
 	{
 		return size;
@@ -39,6 +194,13 @@ public:
 	explicit List(size_t size, int value = int()) :List()
 	{
 		while (size--)push_back(value);
+	}
+	List(const std::initializer_list<int>& il) :List()
+	{
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
 	}
 	~List()
 	{
@@ -179,8 +341,8 @@ public:
 
 //#define BASE_CHECK
 //#define SIZE_CONSTRUCTOR_AND_SYBSCRIPT
-//#define HARDCORE
-#define ITERATORS_CHECK
+#define HARDCORE
+//#define ITERATORS_CHECK
 //#define COPY_CONSTRUCTOR_CHECK
 //#define COPY_ASSIGNMENT_CHECK
 
@@ -221,14 +383,20 @@ void main()
 
 #ifdef HARDCORE
 	List list = { 3, 5, 8, 13, 21 };
-	for (int i : list)
-		cout << i << tab;
+	for (int i : list)	cout << i << tab;	cout << endl;
+	for (List::Iterator it = list.begin(); it != list.end(); it++)
+		cout << *it << tab;
+	cout << endl;
+	//for (List::Iterator it = list.end(); it != list.begin(); it--)cout << *it << tab;	cout << endl;
+
+	for (List::ReverseIterator rit = list.rbegin(); rit != list.rend(); rit++)
+		cout << *rit << tab;
 	cout << endl;
 #endif // HARDCORE
 
 #ifdef ITERATORS_CHECK
 	List list = { 3, 5, 8, 13, 21 };
-	for(???)
+	list.print();
 #endif // ITERATORS_CHECK
 
 
