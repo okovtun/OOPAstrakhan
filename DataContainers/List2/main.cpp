@@ -25,19 +25,8 @@ class List
 		Element* pNext;
 		Element* pPrev;
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
-			Data(Data), pNext(pNext), pPrev(pPrev)
-		{
-#ifdef DEBUG
-			cout << "EConstructor:\t" << this << endl;
-#endif // DEBUG
-		}
-		~Element()
-		{
-#ifdef DEBUG
-			cout << "EDestructor:\t" << this << endl;
-#endif // DEBUG
-		}
+		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr);
+		~Element();
 		friend class List;
 	}*Head, *Tail;
 	size_t size;
@@ -47,33 +36,14 @@ class List
 	protected:
 		Element* Temp;
 	public:
-		BaseIterator(Element* Temp) :Temp(Temp)
-		{
-#ifdef DEBUG
-			cout << "BItConstructor:\t" << this << endl;
-#endif // DEBUG
-		}
-		~BaseIterator()
-		{
-#ifdef DEBUG
-			cout << "BItDestructor:\t" << this << endl;
-#endif // DEBUG
-		}
+		BaseIterator(Element* Temp);
+		~BaseIterator();
 
 		//			Operators:
-		bool operator==(const BaseIterator& other)const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const BaseIterator& other)const
-		{
-			return this->Temp != other.Temp;
-		}
+		bool operator==(const BaseIterator& other)const;
+		bool operator!=(const BaseIterator& other)const;
 
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
+		const int& operator*()const;
 	};
 public:
 	class ConstIterator :public BaseIterator
@@ -220,6 +190,49 @@ public:
 	void print()const;
 	void reverse_print()const;
 };
+
+List::Element::Element(int Data, List::Element* pNext, List::Element* pPrev) :
+	Data(Data), pNext(pNext), pPrev(pPrev)
+{
+#ifdef DEBUG
+	cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
+}
+List::Element::~Element()
+{
+#ifdef DEBUG
+	cout << "EDestructor:\t" << this << endl;
+#endif // DEBUG
+}
+
+List::BaseIterator::BaseIterator(Element* Temp) :Temp(Temp)
+{
+#ifdef DEBUG
+	cout << "BitConstrucor: \t" << this << endl;
+#endif // DEBUG
+}
+List::BaseIterator::~BaseIterator()
+{
+#ifdef DEBUG
+	cout << "BitDestrucor: \t" << this << endl;
+#endif // DEBUG
+}
+
+// Operators
+
+bool List::BaseIterator::operator==(const BaseIterator& other)const
+{
+	return this->Temp == other.Temp;
+}
+bool List::BaseIterator::operator!=(const BaseIterator& other)const
+{
+	return this->Temp != other.Temp;
+}
+
+const int& List::BaseIterator::operator*()const
+{
+	return Temp->Data;
+}
 
 List::ConstIterator List::cbegin()const
 {
