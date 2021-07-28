@@ -185,211 +185,246 @@ public:
 			return Temp->Data;
 		}
 	};
-	ConstIterator cbegin()const
-	{
-		return Head;
-	}
-	ConstIterator cend()const
-	{
-		return nullptr;
-	}
-	Iterator begin()
-	{
-		return Head;
-	}
-	Iterator end()
-	{
-		return nullptr;
-	}
+	
+	ConstIterator cbegin()const;
+	ConstIterator cend()const;
+	Iterator begin();
+	Iterator end();
 
-	ConstReverseIterator crbegin()const
-	{
-		return Tail;
-	}
-	ConstReverseIterator crend()const
-	{
-		return nullptr;
-	}
-	ReverseIterator rbegin()
-	{
-		return Tail;
-	}
-	ReverseIterator rend()
-	{
-		return nullptr;
-	}
+	ConstReverseIterator crbegin()const;
+	ConstReverseIterator crend()const;
+	ReverseIterator rbegin();
+	ReverseIterator rend();
 
-	size_t get_size()const
-	{
-		return size;
-	}
-	List()
-	{
-		Head = Tail = nullptr;
-		size = 0;
-		cout << "LConstructor:\t" << this << endl;
-	}
-	explicit List(size_t size, int value = int()) :List()
-	{
-		while (size--)push_back(value);
-	}
-	List(const std::initializer_list<int>& il) :List()
-	{
-		for (int const* it = il.begin(); it != il.end(); it++)
-		{
-			push_back(*it);
-		}
-	}
-	List(const List& other) :List()
-	{
-		for (ConstIterator it = other.cbegin(); it != other.cend(); it++)
-			push_back(*it);
-		cout << "LCopyConstructor:" << this << endl;
-	}
-	List(List&& other)
-	{
-		this->size = other.size;
-		this->Head = other.Head;
-		this->Tail = other.Tail;
-		other.Head = other.Tail = nullptr;
-		cout << "LMoveConstructor:" << this << endl;
-	}
-	~List()
-	{
-		//while (Head)pop_front();
-		while (Tail)pop_back();
-		cout << "LDestructor:\t" << this << endl;
-	}
+	size_t get_size()const;
+	List();
+	explicit List(size_t size, int value = int());
+	List(const std::initializer_list<int>& il);
+	List(const List& other);
+	List(List&& other);
+	~List();
 
 	//			Operators:
-	int& operator[](size_t index)
-	{
-		if (index >= size)throw std::exception("Error: out of range");
-		Element* Temp;
-		if (index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < index; i++)Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - index - 1; i++)Temp = Temp->pPrev;
-		}
-		return Temp->Data;
-	}
+	int& operator[](size_t index);
 
 	//				Adding elements:
-	void push_front(int Data)
-	{
-		if (Head == nullptr && Tail == nullptr)
-		{
-			Head = Tail = new Element(Data);
-			size++;
-			return;
-		}
-		Element* New = new Element(Data);
-		New->pNext = Head;
-		Head->pPrev = New;
-		Head = New;
-		size++;
-	}
-	void push_back(int Data)
-	{
-		if (Head == nullptr&&Tail == nullptr)
-		{
-			Head = Tail = new Element(Data);
-			size++;
-			return;
-		}
-		Element* New = new Element(Data);
-		New->pPrev = Tail;
-		Tail->pNext = New;
-		Tail = New;
-		size++;
-	}
-	void insert(size_t index, int Data)
-	{
-		if (index > size)return;
-		if (index == 0)return push_front(Data);
-		if (index == size)return push_back(Data);
-
-		//1) Доходим до позиции, на которую нужно вставить элемент:
-		Element* Temp;
-		if (index < size / 2)
-		{
-			Temp = Head;
-			for (size_t i = 0; i < index; i++)Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (size_t i = 0; i < size - index - 1; i++)Temp = Temp->pPrev;
-		}
-
-		//2) Создаем элемент, и включаем его в список:
-		Element* New = new Element(Data);
-		New->pPrev = Temp->pPrev;
-		New->pNext = Temp;
-		Temp->pPrev->pNext = New;
-		Temp->pPrev = New;
-		size++;
-	}
+	void push_front(int Data);
+	void push_back(int Data);
+	void insert(size_t index, int Data);
 
 	//			Removing elements:
-	void pop_front()
-	{
-		if (Head == Tail)
-		{
-			delete Head;
-			Head = Tail = nullptr;
-			size--;
-			return;
-		}
-		//1) Исключаем элемент из списка:
-		Head = Head->pNext;
-		//2) Удаляем элемент из памяти:
-		delete Head->pPrev;
-		//3) "Забываем" об удавляемом элементе:
-		Head->pPrev = nullptr;
-
-		size--;
-	}
-	void pop_back()
-	{
-		if (Head == Tail)
-		{
-			delete Tail;
-			Head = Tail = nullptr;
-			size--;
-			return;
-		}
-
-		//1) Исключаем элемент из списка:
-		Tail = Tail->pPrev;
-		//2) Удавляем исключенный элемент из памяти:
-		delete Tail->pNext;
-		//3) Затираем адрес удаленного элемента:
-		Tail->pNext = nullptr;
-		size--;
-	}
+	void pop_front();
+	void pop_back();
 
 	//			Methods:
-	void print()const
-	{
-		cout << "Head:" << Head << endl;
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов списка: " << size << endl;
-	}
-	void reverse_print()const
-	{
-		cout << "Tail:" << Tail << endl;
-		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов списка: " << size << endl;
-	}
+	void print()const;
+	void reverse_print()const;
 };
+
+List::ConstIterator List::cbegin()const
+{
+	return Head;
+}
+List::ConstIterator List::cend()const
+{
+	return nullptr;
+}
+List::Iterator List::begin()
+{
+	return Head;
+}
+List::Iterator List::end()
+{
+	return nullptr;
+}
+
+List::ConstReverseIterator List::crbegin()const
+{
+	return Tail;
+}
+List::ConstReverseIterator List::crend()const
+{
+	return nullptr;
+}
+List::ReverseIterator List::rbegin()
+{
+	return Tail;
+}
+List::ReverseIterator List::rend()
+{
+	return nullptr;
+}
+
+size_t List::get_size()const
+{
+	return size;
+}
+List::List()
+{
+	Head = Tail = nullptr;
+	size = 0;
+	cout << "LConstructor:\t" << this << endl;
+}
+List::List(size_t size, int value) :List()
+{
+	while (size--)push_back(value);
+}
+List::List(const std::initializer_list<int>& il) :List()
+{
+	for (int const* it = il.begin(); it != il.end(); it++)
+	{
+		push_back(*it);
+	}
+}
+List::List(const List& other) :List()
+{
+	for (ConstIterator it = other.cbegin(); it != other.cend(); it++)
+		push_back(*it);
+	cout << "LCopyConstructor:" << this << endl;
+}
+List::List(List&& other)
+{
+	this->size = other.size;
+	this->Head = other.Head;
+	this->Tail = other.Tail;
+	other.Head = other.Tail = nullptr;
+	cout << "LMoveConstructor:" << this << endl;
+}
+List::~List()
+{
+	//while (Head)pop_front();
+	while (Tail)pop_back();
+	cout << "LDestructor:\t" << this << endl;
+}
+
+//			Operators:
+int& List::operator[](size_t index)
+{
+	if (index >= size)throw std::exception("Error: out of range");
+	Element* Temp;
+	if (index < size / 2)
+	{
+		Temp = Head;
+		for (int i = 0; i < index; i++)Temp = Temp->pNext;
+	}
+	else
+	{
+		Temp = Tail;
+		for (int i = 0; i < size - index - 1; i++)Temp = Temp->pPrev;
+	}
+	return Temp->Data;
+}
+
+//				Adding elements:
+void List::push_front(int Data)
+{
+	if (Head == nullptr && Tail == nullptr)
+	{
+		Head = Tail = new Element(Data);
+		size++;
+		return;
+	}
+	Element* New = new Element(Data);
+	New->pNext = Head;
+	Head->pPrev = New;
+	Head = New;
+	size++;
+}
+void List::push_back(int Data)
+{
+	if (Head == nullptr&&Tail == nullptr)
+	{
+		Head = Tail = new Element(Data);
+		size++;
+		return;
+	}
+	Element* New = new Element(Data);
+	New->pPrev = Tail;
+	Tail->pNext = New;
+	Tail = New;
+	size++;
+}
+void List::insert(size_t index, int Data)
+{
+	if (index > size)return;
+	if (index == 0)return push_front(Data);
+	if (index == size)return push_back(Data);
+
+	//1) Доходим до позиции, на которую нужно вставить элемент:
+	Element* Temp;
+	if (index < size / 2)
+	{
+		Temp = Head;
+		for (size_t i = 0; i < index; i++)Temp = Temp->pNext;
+	}
+	else
+	{
+		Temp = Tail;
+		for (size_t i = 0; i < size - index - 1; i++)Temp = Temp->pPrev;
+	}
+
+	//2) Создаем элемент, и включаем его в список:
+	Element* New = new Element(Data);
+	New->pPrev = Temp->pPrev;
+	New->pNext = Temp;
+	Temp->pPrev->pNext = New;
+	Temp->pPrev = New;
+	size++;
+}
+
+//			Removing elements:
+void List::pop_front()
+{
+	if (Head == Tail)
+	{
+		delete Head;
+		Head = Tail = nullptr;
+		size--;
+		return;
+	}
+	//1) Исключаем элемент из списка:
+	Head = Head->pNext;
+	//2) Удаляем элемент из памяти:
+	delete Head->pPrev;
+	//3) "Забываем" об удавляемом элементе:
+	Head->pPrev = nullptr;
+
+	size--;
+}
+void List::pop_back()
+{
+	if (Head == Tail)
+	{
+		delete Tail;
+		Head = Tail = nullptr;
+		size--;
+		return;
+	}
+
+	//1) Исключаем элемент из списка:
+	Tail = Tail->pPrev;
+	//2) Удавляем исключенный элемент из памяти:
+	delete Tail->pNext;
+	//3) Затираем адрес удаленного элемента:
+	Tail->pNext = nullptr;
+	size--;
+}
+
+//			Methods:
+void List::print()const
+{
+	cout << "Head:" << Head << endl;
+	for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+	cout << "Количество элементов списка: " << size << endl;
+}
+void List::reverse_print()const
+{
+	cout << "Tail:" << Tail << endl;
+	for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+	cout << "Количество элементов списка: " << size << endl;
+}
 
 List operator+(const List& left, const List& right)
 {
