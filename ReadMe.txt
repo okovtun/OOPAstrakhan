@@ -9,6 +9,19 @@ https://drive.google.com/drive/folders/1mIhAKMp5-Jpy6s5X8u924tRCXFEdHE_z?usp=sha
 ///////////////////////				DATA CONTAINERS			//////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 
+Boost:
+https://www.boost.org/doc/libs/?view=categorized
+https://www.boost.org/doc/libs/1_76_0/doc/html/boost_asio.html
+https://www.boost.org/doc/libs/1_76_0/doc/html/atomic.html
+https://www.boost.org/doc/libs/1_76_0/libs/filesystem/doc/index.htm
+https://www.boost.org/doc/libs/1_76_0/doc/html/thread.html
+
+Qt:
+https://www.qt.io/
+https://doc.qt.io/qt-5/gettingstarted.html
+https://doc.qt.io/qt-5/qtwidgets-tutorials-notepad-example.html
+https://doc.qt.io/qt-5/qtdoc-tutorials-alarms-example.html
+
 TODO:
 От ветки InheritIteratorInList2 создать ветку SeparatedList2withInheritIterator 
 и в этой разделить классы на файлы. Сделать это в 2 commit-а:
